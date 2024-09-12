@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 import strawberry
 
 
@@ -6,4 +6,4 @@ import strawberry
 class UploadFileResponse:
     success: bool
     message: str
-    url: Optional[str]
+    urls: Optional[List[str]]

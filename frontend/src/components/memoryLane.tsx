@@ -12,7 +12,16 @@ const MemoryLane = () => {
     const navigate = useNavigate();
     const [files, setFiles] = useState<FilePondFile[]>([]);
 
-    const [uploadImage] = useMutation(UPLOAD_FILE_MUTATION);
+    const [uploadImage] = useMutation(UPLOAD_FILE_MUTATION,{
+        onCompleted(data) {
+            console.log("Data recieved", data)
+            
+        },
+        onError: (err) => {
+            console.log("Error from mutation", err)
+        }
+        
+    });
 
     const uploadFile = (fileItems : FilePondFile[]) => {
         setFiles(fileItems);
