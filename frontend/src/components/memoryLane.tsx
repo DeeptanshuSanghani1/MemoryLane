@@ -1,16 +1,33 @@
 import { useNavigate } from "react-router-dom";
 import { FilePond, registerPlugin } from 'react-filepond';
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import '../App.css';
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { FilePondFile, FilePondInitialFile } from "filepond";
 import { UPLOAD_FILE_MUTATION } from "../graphql/mutations/photo-upload-mutation";
+import { FETCH_IMAGE_URL } from "../graphql/query/photo-initialize-query";
+
+
 
 const MemoryLane = () => {
+    const [urls, setUrls] = useState([])
     const navigate = useNavigate();
     const [files, setFiles] = useState<FilePondFile[]>([]);
+
+    const { loading, data, error } = useQuery(FETCH_IMAGE_URL, {
+        onCompleted(data) {
+            setUrls(data || [])
+            console.log(data)
+        },
+        onError(error) {
+            console.error(error)
+        },
+    })
+
+
+    
 
     const [uploadImage] = useMutation(UPLOAD_FILE_MUTATION,{
         onCompleted(data) {
@@ -54,6 +71,7 @@ const MemoryLane = () => {
     return (
         <>
             <div className="flex justify-center items-center h-screen">
+                
                 <div className="">
                 </div>
                 <FilePond
@@ -71,6 +89,8 @@ const MemoryLane = () => {
   styleButtonProcessItemPosition="right"
   
 />
+
+
 
 
 

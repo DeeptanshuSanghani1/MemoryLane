@@ -14,7 +14,7 @@ async def upload_to_gcp(file: UploadFile):
     blob = bucket.blob(file.filename)
     try:
         blob.upload_from_file(file.file, content_type=file.content_type)
-        print("Before Upload: ", image_urls)
+
         access_url = f"https://storage.googleapis.com/{bucket.name}/{blob.name}"
         set_image_urls(access_url)
         print("From upload file: ", image_urls)
