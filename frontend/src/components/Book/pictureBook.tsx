@@ -3,6 +3,10 @@ import HTMLFlipBook from "react-pageflip"
 import './flipbookStyles.css'
 import { Flip, PageFlip } from "page-flip";
 
+interface PageProps extends React.HTMLAttributes<HTMLDivElement> {
+    number: number;
+    imageUrl?: string;
+  }
 
 const PageCover = React.forwardRef<HTMLDivElement,{children:React.ReactNode}>((props, ref) => {
     return (
@@ -15,25 +19,36 @@ const PageCover = React.forwardRef<HTMLDivElement,{children:React.ReactNode}>((p
   });
 
 
-const Page = React.forwardRef<HTMLDivElement, {number: number, children:React.ReactNode}>((props, ref) => {
+const Page = React.forwardRef<HTMLDivElement, {number: number, imageUrl?:string, children?:React.ReactNode}>((props, ref) => {
     return (
         <div className="page" ref={ref}>
-             <div className="page-content">
-                <h2 className="page-header">Page header - {props.number}</h2>
-                <div className="page-image"></div>
-                <div className="page-text">{props.children}</div>
-                <div className="page-footer">{props.number + 1}</div>
-            </div>
-
+          <div className="page-content">
+            
+            {props.imageUrl && (
+              <div
+                className="page-image"
+                style={{
+                  backgroundImage: `url(${props.imageUrl})`,
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  height: '100%',
+                  width: '100%',
+                }}
+              ></div>
+            )}
+            
+            {props.children && <div className="page-text">{props.children}</div>}
+            <div className="page-footer">{props.number + 1}</div>
+          </div>
         </div>
-    );
+      );
 });
 
 
-const PictureBook = () => {
+const PictureBook = ({urls} : {urls : string[]}) => {
     const[pages,setPages] = useState<number>(0);
     const[totalPages, setTotalPages] = useState<number>(0);
-    let flipBookRef= useRef<PageFlip>();
+    let flipBookRef= useRef<PageFlip | null>(null);
     
 
     const nextButtonClick = () => {
@@ -46,25 +61,54 @@ const PictureBook = () => {
       };
 
     const onPage = (e : {data:number}) => {
-        
-        console.log("props: ", flipBookRef.current)
+        console.log("props: ", e.data)
         setPages(e.data)
 
     }
 
     useEffect(() => {
         if (flipBookRef.current) {
-            console.log(flipBookRef)
             setTotalPages(flipBookRef.current.getPageCount());
         }
-    }, []);
+    }, [urls]);
+
+    const bookPages = [
+        ...(urls.length > 0
+          ? urls.map((url, index) => (
+              <Page key={`${index}-${url}`} number={index} imageUrl={url} />
+            ))
+          : [
+              <Page key="placeholder" number={0}>
+                <div className="text-center text-white">
+                  No images to display. Please add images to your book.
+                </div>
+              </Page>,
+            ]),
+      ];
     
 
     return(
         <>
-        <div>
-        <HTMLFlipBook 
-        ref={(el) => {  flipBookRef = el; }}
+        <div className="relative flex justify-center items-center overflow-visible">
+      <button
+        className="absolute text-white top-1/2 left-[-250px] transform -translate-y-1/2
+        bg-[#1C1A1C] w-[10em] h-[3em] rounded-full flex justify-center items-center cursor-pointer
+        transition-all duration-450 ease-in-out
+        hover:bg-gradient-to-b from-[#A47CF3] to-[#683FEA]
+        hover:shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.4),
+        inset_0px_-4px_0px_0px_rgba(0,0,0,0.2),
+        0px_0px_0px_4px_rgba(255,255,255,0.2),
+        0px_0px_180px_0px_#9917FF]"
+        onClick={prevButtonClick}
+      >
+        Previous
+      </button>
+
+      <HTMLFlipBook 
+      key={urls.length}
+        ref={(el) => { 
+            if(el) flipBookRef.current= el.pageFlip()
+         }}
          width={550}
          height={773}
          minWidth={300} 
@@ -90,31 +134,24 @@ const PictureBook = () => {
          onFlip={onPage}
          disableFlipByClick={false}>
             <PageCover>BOOK TITLE</PageCover>
-            <Page number={1}>Page text</Page>
-            <Page number={2}>Page text</Page>
-            <Page number={3}>Page text</Page>
-            <Page number={4}>Page text</Page>
+            {bookPages}
             <PageCover>THE END</PageCover>
         </HTMLFlipBook>
-        <div className="container">
-            <div>
 
-              <button type="button"  onClick={prevButtonClick}>
-                Previous page
-              </button>
-
-              [<span>{pages + 1}</span> of
-               <span>{totalPages}</span>]
-
-              <button type="button" onClick={nextButtonClick}>
-                Next page
-              </button>
-
-            </div>
-
-          </div>
-
-        </div>
+      <button
+        className="absolute text-white top-1/2 right-[-250px] transform -translate-y-1/2
+        bg-[#1C1A1C] w-[10em] h-[3em] rounded-full flex justify-center items-center cursor-pointer
+        transition-all duration-450 ease-in-out
+        hover:bg-gradient-to-b from-[#A47CF3] to-[#683FEA]
+        hover:shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.4),
+        inset_0px_-4px_0px_0px_rgba(0,0,0,0.2),
+        0px_0px_0px_4px_rgba(255,255,255,0.2),
+        0px_0px_180px_0px_#9917FF]"
+        onClick={nextButtonClick}
+      >
+        Next
+      </button>
+    </div>
         </>
     )
 }

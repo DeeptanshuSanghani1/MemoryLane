@@ -8,30 +8,48 @@ import { gql, useMutation, useQuery } from "@apollo/client";
 import { FilePondFile, FilePondInitialFile } from "filepond";
 import { UPLOAD_FILE_MUTATION } from "../graphql/mutations/photo-upload-mutation";
 import { FETCH_IMAGE_URL } from "../graphql/query/photo-initialize-query";
+import Background from "./background";
+import FileUploader from "./fileUploader";
+import SuccessMessage from "./sucessMessage";
+import PictureBook from "./Book/pictureBook";
+import { url } from "inspector";
 
 
 
 const MemoryLane = () => {
-    const [urls, setUrls] = useState([])
+    const [urls, setUrls] = useState<string[]>([])
     const navigate = useNavigate();
     const [files, setFiles] = useState<FilePondFile[]>([]);
-
-    const { loading, data, error } = useQuery(FETCH_IMAGE_URL, {
-        onCompleted(data) {
-            setUrls(data || [])
-            console.log(data)
+    const[uploadSuccessMessage, setUploadSuccessMessage] = useState(false);
+    const { loading, data, error, refetch } = useQuery(FETCH_IMAGE_URL, {
+        onCompleted(data) { 
+            if(data?.allImages){
+                setUrls(data.allImages)
+            }
         },
         onError(error) {
             console.error(error)
         },
     })
 
+    useEffect(() => {
+        if (data && data.allImages) {
+          setUrls(data.allImages);
+          console.log("URLs updated via useEffect:", data.allImages);
+        }
+      }, [data]);
 
     
 
     const [uploadImage] = useMutation(UPLOAD_FILE_MUTATION,{
+        refetchQueries: [{ query: FETCH_IMAGE_URL }],
+        awaitRefetchQueries: true,
         onCompleted(data) {
-            console.log("Data recieved", data)
+            console.log("Image updated")
+            refetch().then(refetchedData => {
+            })
+            setUploadSuccessMessage(true); // Show success message
+            setTimeout(() => setUploadSuccessMessage(false), 5000); // Hide after 5 seconds
             
         },
         onError: (err) => {
@@ -44,7 +62,6 @@ const MemoryLane = () => {
         setFiles(fileItems);
         if(fileItems.length > 0){
             const file = fileItems[0].file
-            console.log(file)
             const fileBlob = new File([file], file.name, {
                 type: file.type,
                 lastModified: file.lastModified
@@ -68,35 +85,30 @@ const MemoryLane = () => {
 
         }
     }
-    return (
-        <>
-            <div className="flex justify-center items-center h-screen">
-                
-                <div className="">
-                </div>
-                <FilePond
-  className=" bg-[#1C1A1C] w-[15em] h-[5em] rounded-full flex justify-center items-center gap-3 cursor-pointer transition-all duration-450 ease-in-out hover:bg-gradient-to-b from-[#A47CF3] to-[#683FEA] hover:shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.4),inset_0px_-4px_0px_0px_rgba(0,0,0,0.2),0px_0px_0px_4px_rgba(255,255,255,0.2),0px_0px_180px_0px_#9917FF]"
-  files={files.length > 0 ? [files[0].file] : []}
-  allowMultiple={false}
-  onupdatefiles={uploadFile} 
-  name="file"
-  acceptedFileTypes={['image/jpeg', 'image/jpg', 'image/png']}
-  labelIdle='<span class="filepond--label-action">Add Images</span>'
-  credits={false}
-  labelFileProcessingComplete="Upload Success"
-  stylePanelLayout="compact"
-  styleButtonRemoveItemPosition="right"
-  styleButtonProcessItemPosition="right"
-  
-/>
+    useEffect(() => {
+        console.log("URLs updated:", urls);
+      }, [urls]);
 
-
-
-
-
-
+      
+      return (
+        <div className="relative h-screen w-screen">
+          
+          <Background />
+    
+          
+          <div className="relative z-0 flex flex-col items-center justify-center h-full w-full">
+        <div className="w-full max-w-3xl mx-auto p-6 bg-transparent">
+          
+          <PictureBook urls={urls} />
+    
+              
+              <div className="mt-4 flex flex-col items-center">
+                <FileUploader files={files} onUploadFile={uploadFile} />
+                <SuccessMessage isVisible={uploadSuccessMessage} />
+              </div>
             </div>
-        </>
-    )
+          </div>
+        </div>
+      );
 }
 export default MemoryLane;

@@ -1,23 +1,22 @@
 .filepond--wrapper input[type="file"] {
-  opacity: 0;           
-  position: absolute;      
-
-  width: 100%;
-  height: 100%;
-  cursor: pointer;          
+  display: none; /* Hide the file input */
 }
+
 .filepond--label-action {
   color: white !important;
-  padding-left: 3rem;
 }
 
-.filepond--complete-action{
+.filepond--complete-action {
   color: white !important;
   padding-right: 3rem;
-  
 }
 
-.filepond--assistant span[id="filepond--assistant-qlu0ekk0s"]{
+.filepond--assistant span[id="filepond--assistant-qlu0ekk0s"] {
   color: white !important;
   padding-right: 3rem;
+}
+
+/* Hide the file list in FilePond */
+.filepond--item {
+  display: none !important;
 }

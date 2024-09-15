@@ -6,4 +6,4 @@ import strawberry
 class UploadFileResponse:
     success: bool
     message: str
-    urls: Optional[List[str]]
+    url: Optional[str]

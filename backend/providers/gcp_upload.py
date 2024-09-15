@@ -18,7 +18,7 @@ async def upload_to_gcp(file: UploadFile):
         access_url = f"https://storage.googleapis.com/{bucket.name}/{blob.name}"
         set_image_urls(access_url)
         print("From upload file: ", image_urls)
-        return get_image_url()
+        return access_url
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to upload file: {str(e)}")
 

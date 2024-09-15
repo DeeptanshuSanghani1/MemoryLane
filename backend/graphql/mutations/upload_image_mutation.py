@@ -12,4 +12,4 @@ class Mutation:
         if(file.content_type not in ['image/jpeg', 'image/jpg', 'image/png']):
             raise HTTPException(status_code=400, detail="Invalid file type")
         access_url = await upload_to_gcp(file)
-        return UploadFileResponse(success= True, message="File Uploaded Successfully", urls=access_url)
+        return UploadFileResponse(success= True, message="File Uploaded Successfully", url=access_url)
