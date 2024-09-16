@@ -1,3 +1,8 @@
+/* flipbookStyles.css */
+
+/* Import a romantic Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
 /* Flipbook container */
 .flipbook-wrapper {
     display: flex;
@@ -11,7 +16,7 @@
     justify-content: center;
     align-items: center;
     padding: 20px;
-    max-width: 350px; /* Adjust to your smaller book size */
+    max-width: 350px; /* Adjust to your book size */
 }
 
 /* Styling each page */
@@ -21,23 +26,88 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fdfaf7;
-    border: 1px solid #c2b5a3;
+    background-color: #FFF0F5; /* LavenderBlush for a romantic feel */
+    border: 1px solid #E6A9A9; /* Soft pink border */
     overflow: hidden;
-    padding: 10px; /* Reduce padding for smaller pages */
+    padding: 10px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-
 .page-header {
-    font-size: 16px; /* Smaller header font */
+    font-size: 20px;
     font-weight: bold;
+    font-family: 'Dancing Script', cursive; /* Romantic font */
+    color: #B03060; /* Maroon color */
+    text-align: center;
+    margin-bottom: 10px;
 }
 
 .page-footer {
-    font-size: 12px; /* Smaller footer font */
+    font-size: 16px;
+    font-family: 'Dancing Script', cursive;
+    color: #B03060;
+    text-align: center;
+    margin-top: 10px;
 }
 
-.stf__parent{position: relative;
+.page-cover {
+    background-color: #FFD1DC; /* Light pink for covers */
+    color: #B03060;
+    border: 1px solid #E6A9A9;
+}
+
+.page-cover h2 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 24px;
+    color: #B03060;
+}
+
+
+
+.page.--left {
+    border-right: none;
+    box-shadow: inset -5px 0 15px -5px rgba(0, 0, 0, 0.1);
+}
+
+.page.--right {
+    border-left: none;
+    box-shadow: inset 5px 0 15px -5px rgba(0, 0, 0, 0.1);
+}
+
+.page .page-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.page-image {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Page text styling */
+.page .page-text {
+    font-size: 18px;
+    font-family: 'Dancing Script', cursive;
+    color: #B03060;
+    text-align: center;
+    padding: 10px;
+}
+
+/* Adjust shadows for a softer feel */
+.page.page-cover.page-cover-top {
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.1), -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Flipbook specific styles */
+.stf__parent {
+    position: relative;
     display: block;
     box-sizing: border-box;
     transform: translateZ(0);
@@ -53,96 +123,8 @@
     perspective: 2000px;
 }
 
-.page.page-cover.page-cover-top{
-    box-shadow: inset 0 0 30px 0 rgba(36, 10, 3, .5), -2px 0 5px 2px rgba(0, 0, 0, .4)
-}
-
-.page.page-cover {
-    background-color: #e3d0b5;
-    color: #785e3a;
-    border: 1px solid #998466;
-}
-
-.page.--right {
-    border-left: 0;
-    box-shadow: inset 7px 0 30px -7px rgba(0, 0, 0, .4);
-}
-
 .stf__item {
     display: none;
     position: absolute;
     transform-style: preserve-3d;
-}
-
-.page .page-content {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: stretch;
-}
-
-.page.--left {
-    border-right: 0;
-    box-shadow: inset -7px 0 30px -7px rgba(0, 0, 0, .4);
-}
-
-.page-image {
-    width: 100%;
-    height: 100%;
-    background-size: contain;
-    background-position: 50%;
-    background-repeat: no-repeat;
-}
-
-.stf__item {
-    display: none;
-    position: absolute;
-    transform-style: preserve-3d;
-}
-
-.page .page-content {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: stretch;
-}
-
-.page .page-content .page-header {
-    height: 30px;
-    font-size: 100%;
-    text-transform: uppercase;
-    text-align: center;
-}
-
-.page .page-content .page-image {
-    height: 100%;
-    background-size: contain;
-    background-position: 50%;
-    background-repeat: no-repeat;
-}
-
-.page .page-content .page-text {
-    height: 100%;
-    flex-grow: 1;
-    font-size: 80%;
-    text-align: justify;
-    margin-top: 10px;
-    padding-top: 10px;
-    box-sizing: border-box;
-    border-top: 1px solid #f4e8d7;
-}
-
-.page.--right .page-footer {
-    text-align: right;
-}
-
-.page .page-content .page-footer {
-    height: 30px;
-    border-top: 1px solid #f4e8d7;
-    font-size: 80%;
-    color: #998466;
 }

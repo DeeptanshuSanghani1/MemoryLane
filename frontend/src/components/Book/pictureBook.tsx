@@ -3,10 +3,6 @@ import HTMLFlipBook from "react-pageflip"
 import './flipbookStyles.css'
 import { Flip, PageFlip } from "page-flip";
 
-interface PageProps extends React.HTMLAttributes<HTMLDivElement> {
-    number: number;
-    imageUrl?: string;
-  }
 
 const PageCover = React.forwardRef<HTMLDivElement,{children:React.ReactNode}>((props, ref) => {
     return (
@@ -20,6 +16,7 @@ const PageCover = React.forwardRef<HTMLDivElement,{children:React.ReactNode}>((p
 
 
 const Page = React.forwardRef<HTMLDivElement, {number: number, imageUrl?:string, children?:React.ReactNode}>((props, ref) => {
+    console.log(props)
     return (
         <div className="page" ref={ref}>
           <div className="page-content">
