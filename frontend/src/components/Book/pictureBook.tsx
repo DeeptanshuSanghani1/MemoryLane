@@ -87,19 +87,7 @@ const PictureBook = ({urls} : {urls : string[]}) => {
     return(
         <>
         <div className="relative flex justify-center items-center overflow-visible">
-      <button
-        className="absolute text-white top-1/2 left-[-250px] transform -translate-y-1/2
-        bg-[#1C1A1C] w-[10em] h-[3em] rounded-full flex justify-center items-center cursor-pointer
-        transition-all duration-450 ease-in-out
-        hover:bg-gradient-to-b from-[#A47CF3] to-[#683FEA]
-        hover:shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.4),
-        inset_0px_-4px_0px_0px_rgba(0,0,0,0.2),
-        0px_0px_0px_4px_rgba(255,255,255,0.2),
-        0px_0px_180px_0px_#9917FF]"
-        onClick={prevButtonClick}
-      >
-        Previous
-      </button>
+
 
       <HTMLFlipBook 
       key={urls.length}
@@ -135,19 +123,6 @@ const PictureBook = ({urls} : {urls : string[]}) => {
             <PageCover>THE END</PageCover>
         </HTMLFlipBook>
 
-      <button
-        className="absolute text-white top-1/2 right-[-250px] transform -translate-y-1/2
-        bg-[#1C1A1C] w-[10em] h-[3em] rounded-full flex justify-center items-center cursor-pointer
-        transition-all duration-450 ease-in-out
-        hover:bg-gradient-to-b from-[#A47CF3] to-[#683FEA]
-        hover:shadow-[inset_0px_1px_0px_0px_rgba(255,255,255,0.4),
-        inset_0px_-4px_0px_0px_rgba(0,0,0,0.2),
-        0px_0px_0px_4px_rgba(255,255,255,0.2),
-        0px_0px_180px_0px_#9917FF]"
-        onClick={nextButtonClick}
-      >
-        Next
-      </button>
     </div>
         </>
     )

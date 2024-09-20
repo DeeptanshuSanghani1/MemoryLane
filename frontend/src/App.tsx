@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './App.css'; // Keep this for any additional styling
+import Background from './components/background';
 
 function App() {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ function App() {
   return (
     <div className="relative h-screen w-screen overflow-hidden">
       {/* Full-screen background */}
-      <div className="fixed inset-0 h-full w-full filter blur-[0.1vmin] bg-[radial-gradient(ellipse_at_top,transparent_0%,black),radial-gradient(ellipse_at_bottom,black,rgba(145,233,255,0.2)),repeating-linear-gradient(220deg,rgb(0,0,0)_0px,rgb(0,0,0)_19px,transparent_19px,transparent_22px),repeating-linear-gradient(189deg,rgb(0,0,0)_0px,rgb(0,0,0)_19px,transparent_19px,transparent_22px),repeating-linear-gradient(148deg,rgb(0,0,0)_0px,rgb(0,0,0)_19px,transparent_19px,transparent_22px),linear-gradient(90deg,white,gray)] bg-cover"></div>
+      <Background></Background>
 
       {/* Text animation */}
       <h1 className="absolute inset-0 flex flex-wrap justify-center items-center text-white text-4xl font-mono leading-tight tracking-normal sm:tracking-[20px]">
