@@ -9,12 +9,9 @@ import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/c
 import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
 
 
-// const uploadLink = createUploadLink({
-//   uri: 'http://127.0.0.1:8000/graphql', // Your GraphQL server URL
-// });
 const client = new ApolloClient({
   link: createUploadLink({
-    uri : "http://127.0.0.1:8000/graphql"
+    uri : process.env.REACT_APP_GRAPHQL_ENDPOINT ||  "http://127.0.0.1:8000/graphql"
   }),
   cache: new InMemoryCache()
 })
