@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface SuccessMessageProps {
-    isVisible: boolean; // Prop to determine if the message is visible
+    isVisible: boolean;
 }
 
 const SuccessMessage: React.FC<SuccessMessageProps> = ({ isVisible }) => {
