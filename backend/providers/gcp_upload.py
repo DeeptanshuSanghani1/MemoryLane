@@ -6,6 +6,7 @@ from backend.providers.gcp_image_fetch import image_urls
 from backend.global_constants import set_image_urls,image_urls,get_image_url
 
 
+
 async def upload_to_gcp(file: UploadFile):
     global image_urls
     credentials = service_account.Credentials.from_service_account_info(settings.google_cloud_credentials)
@@ -17,7 +18,6 @@ async def upload_to_gcp(file: UploadFile):
 
         access_url = f"https://storage.googleapis.com/{bucket.name}/{blob.name}"
         set_image_urls(access_url)
-        print("From upload file: ", image_urls)
         return access_url
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to upload file: {str(e)}")

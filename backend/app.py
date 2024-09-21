@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+import os
 from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -31,7 +32,9 @@ app.include_router(graphql_app, prefix="/graphql")
 
 # Allow Front-end Origin in local development
 origins = ["http://localhost:3000",
-           "http://192.168.2.72:3000"]
+           "http://192.168.2.72:3000",
+           os.getenv("WEB_URL")]
+
 
 app.add_middleware(
     CORSMiddleware,
