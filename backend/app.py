@@ -33,6 +33,7 @@ app.include_router(graphql_app, prefix="/graphql")
 # Allow Front-end Origin in local development
 origins = ["http://localhost:3000",
            "http://192.168.2.72:3000",
+            "https://*.vercel.app",
            os.getenv("WEB_URL")]
 
 
