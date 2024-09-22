@@ -5,7 +5,7 @@ import App from './App';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import MemoryLane from './components/memoryLane';
-import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
 
 
