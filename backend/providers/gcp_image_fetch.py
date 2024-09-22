@@ -1,4 +1,6 @@
 import json
+import logging
+import os
 from google.cloud import storage
 from google.oauth2 import service_account
 from backend.constants import settings
@@ -10,6 +12,7 @@ def initial_fetch_image():
      application first starts. '''
     global image_urls
     #credential_info = json.loads(SECRET_JSON)
+    logging.info(f"WEB_URL: {os.getenv('PRIVATE_KEY')}")
     credentials = service_account.Credentials.from_service_account_info(settings.google_cloud_credentials)
     client = storage.Client(credentials=credentials)
     bucket = client.get_bucket("images-bucket-memory-lane")

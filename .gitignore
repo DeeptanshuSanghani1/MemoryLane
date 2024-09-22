@@ -174,3 +174,7 @@ cython_debug/
 .idea/
 
 *.db
+.dockerfile
+Dockerfile
+origins-url.json
+service-account.json
