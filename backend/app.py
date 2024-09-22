@@ -36,6 +36,8 @@ origins = ["http://localhost:3000",
            os.getenv("WEB_URL")]
 
 
+
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -44,12 +46,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# @api.get("/healthcheck")
-# async def healthcheck():
-#     """
-#     Endpoint to verify that the service is up Zand running
-#     """
-#     return {"status": "backen is running"}
+@app.get("/healthcheck")
+async def healthcheck():
+    return {"status": "Backend is running"}
 
 
 
