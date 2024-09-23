@@ -63,7 +63,11 @@ logging.info(f"origins2: {origins}")
 origins.extend([
     "http://localhost:3000",
     "http://192.168.2.72:3000",
+    "https://memory-lane-frontend.vercel.app",
+    "https://memory-lane-frontend-git-master-deeptanshu-sanghanis-projects.vercel.app/",
+    "https://memory-lane-frontend-mr5megbcd-deeptanshu-sanghanis-projects.vercel.app/"
 ])
+
 
 logging.info(f"origins3: {origins}")
 
