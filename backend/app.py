@@ -25,11 +25,15 @@ def load_origins():
     try:
         with open(origins_file, 'r') as f:
             origins_data = json.load(f)
-            origins = [origins_data[key] for key in origins_data]
+            # Access the 'web_url' key explicitly
+            origins = [origins_data.get('web_url')]
             logging.info(f"origins: {origins}")
             return origins
     except FileNotFoundError:
         logging.error(f"{origins_file} not found.")
+        return []
+    except json.JSONDecodeError:
+        logging.error(f"Error decoding JSON from {origins_file}.")
         return []
 
 @asynccontextmanager
@@ -62,10 +66,7 @@ logging.info(f"origins2: {origins}")
 # Allow Front-end Origin in local development
 origins.extend([
     "http://localhost:3000",
-    "http://192.168.2.72:3000",
-    "https://memory-lane-frontend.vercel.app",
-    "https://memory-lane-frontend-git-master-deeptanshu-sanghanis-projects.vercel.app/",
-    "https://memory-lane-frontend-mr5megbcd-deeptanshu-sanghanis-projects.vercel.app/"
+    "http://192.168.2.72:3000"
 ])
 
 

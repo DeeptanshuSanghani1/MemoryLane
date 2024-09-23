@@ -11,7 +11,7 @@ import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
 
 const client = new ApolloClient({
   link: createUploadLink({
-    uri :  'http://localhost:8080/graphql' || '0.0.0.0:8000'
+    uri : process.env.REACT_APP_GRAPHQL_ENDPOINT || 'http://localhost:8000/graphql' || '0.0.0.0:8000/graphql'
   }),
   cache: new InMemoryCache()
 })
