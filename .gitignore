@@ -175,6 +175,6 @@ cython_debug/
 
 *.db
 .dockerfile
-Dockerfile
 origins-url.json
 service-account.json
+cors.json

@@ -8,7 +8,7 @@ from backend.global_constants import set_image_urls,image_urls,get_image_url
 
 
 async def upload_to_gcp(file: UploadFile):
-    global image_urls
+    image_urls
     credentials = service_account.Credentials.from_service_account_info(settings.google_cloud_credentials)
     client = storage.Client(credentials=credentials)
     bucket = client.get_bucket("images-bucket-memory-lane")
