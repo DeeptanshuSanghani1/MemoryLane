@@ -1,7 +1,7 @@
 import React, { ReactElement, useEffect, useRef, useState } from "react"
 import HTMLFlipBook from "react-pageflip"
 import './flipbookStyles.css'
-import { Flip, PageFlip } from "page-flip";
+import { PageFlip } from "page-flip";
 
 
 const PageCover = React.forwardRef<HTMLDivElement,{children:React.ReactNode}>((props, ref) => {
@@ -16,7 +16,7 @@ const PageCover = React.forwardRef<HTMLDivElement,{children:React.ReactNode}>((p
 
 
 const Page = React.forwardRef<HTMLDivElement, {number: number, imageUrl?:string, children?:React.ReactNode}>((props, ref) => {
-    console.log(props)
+    
     return (
         <div className="page" ref={ref}>
           <div className="page-content">
@@ -49,7 +49,7 @@ const PictureBook = ({urls} : {urls : string[]}) => {
     
 
     const nextButtonClick = () => {
-        console.log("FLips: ", flipBookRef.current?.flipNext())
+        
         flipBookRef.current?.flipNext();
       };
     
@@ -58,7 +58,7 @@ const PictureBook = ({urls} : {urls : string[]}) => {
       };
 
     const onPage = (e : {data:number}) => {
-        console.log("props: ", e.data)
+        
         setPages(e.data)
 
     }

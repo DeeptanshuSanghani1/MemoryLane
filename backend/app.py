@@ -7,12 +7,9 @@ import os
 from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import strawberry
-from backend.graphql.queries.fetch_image_query import FetchImageQuery
+# import strawberry
 from backend.providers import gcp_upload
-from backend.routers import gcp_upload_router
-from strawberry.fastapi import GraphQLRouter
-from backend.graphql.schema import schema
+from backend.routers import auth_router, photo_router
 import uvicorn
 
 import logging
@@ -40,24 +37,30 @@ def load_origins():
         logging.error(f"Error decoding JSON from {origins_file}.")
         return origins
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    logging.info(f"TYPE: {os.getenv('TYPE')}")
-    logging.info(f"PROJECT_ID: {os.getenv('PROJECT_ID')}")
-    logging.info(f"CLIENT_EMAIL: {os.getenv('CLIENT_EMAIL')}")
-    logging.info(f"WEB_URL: {os.getenv('WEB_URL')}")
-    logging.info(f"WEB_URL: {os.getenv('PRIVATE_KEY')}")
-    fetch_image = FetchImageQuery()
-    fetch_image.all_images()
-    yield
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     logging.info(f"TYPE: {os.getenv('TYPE')}")
+#     logging.info(f"PROJECT_ID: {os.getenv('PROJECT_ID')}")
+#     logging.info(f"CLIENT_EMAIL: {os.getenv('CLIENT_EMAIL')}")
+#     logging.info(f"WEB_URL: {os.getenv('WEB_URL')}")
+#     logging.info(f"WEB_URL: {os.getenv('PRIVATE_KEY')}")
+#     fetch_image = FetchImageQuery()
+#     fetch_image.all_images()
+#     yield
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
+api = FastAPI(root_path="/api")
+api.title = "guardian api"
+app.mount("/api", api, name="api")
+
+api.include_router(auth_router.router, prefix="/auth")
+api.include_router(photo_router.router, prefix="/upload") 
 
 app.title = "memory-lane"
 
-graphql_app = GraphQLRouter(schema= schema)
-app.include_router(graphql_app, prefix="/graphql")
+# graphql_app = GraphQLRouter(schema= schema)
+# app.include_router(graphql_app, prefix="/graphql")
 
 origins = load_origins()
 logging.info(f"origins2: {origins}")
@@ -78,7 +81,7 @@ logging.info(f"origins3: {origins}")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://memory-lane-frontend.vercel.app"],
+    allow_origins=["http://localhost:3000", "https://ap1l0zcf08.execute-api.us-east-1.amazonaws.com/Prod", "https://staging.d2kdnsart2qsiq.amplifyapp.com/", "https://ap1l0zcf08.execute-api.us-east-1.amazonaws.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

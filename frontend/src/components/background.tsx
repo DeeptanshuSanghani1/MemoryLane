@@ -1,4 +1,3 @@
-// Background.tsx
 import React from 'react';
 
 const Background: React.FC = () => {

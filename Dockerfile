@@ -12,5 +12,5 @@ COPY origins-url.json /app./origins-url.json
 COPY backend /app/backend
 WORKDIR /app/backend
 ENV PYTHONPATH=/app
-EXPOSE 8080
-CMD ["uvicorn", "backend.app:app", "--reload", "--host", "0.0.0.0", "--port", "8080", "--log-level", "info"]
+EXPOSE 8000
+CMD ["uvicorn", "backend.app:app", "--reload", "--host", "0.0.0.0", "--port", "8000", "--log-level", "info"]

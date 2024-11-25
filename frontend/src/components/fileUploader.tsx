@@ -3,8 +3,8 @@ import React from 'react';
 import { FilePond } from 'react-filepond';
 
 interface FileUploaderProps {
-    files: FilePondFile[]; // Type for the files array
-    onUploadFile: (fileItems: FilePondFile[]) => void; // Type for the upload function
+    files: FilePondFile[];
+    onUploadFile: (fileItems: FilePondFile[]) => void;
 }
 
 const FileUploader: React.FC<FileUploaderProps> = ({ files, onUploadFile }) => {
@@ -25,7 +25,6 @@ const FileUploader: React.FC<FileUploaderProps> = ({ files, onUploadFile }) => {
                 styleButtonProcessItemPosition="right"
             />
 
-            {/* Custom "Add Images" Button */}
             <div
                 className="relative bg-[#1C1A1C] w-[15em] h-[5em] rounded-full flex justify-center items-center gap-3 cursor-pointer
                 transition-all duration-450 ease-in-out
