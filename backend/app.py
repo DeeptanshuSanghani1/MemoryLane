@@ -2,6 +2,8 @@ from contextlib import asynccontextmanager
 import json
 from backend.constants import settings
 from dotenv import load_dotenv
+
+from backend.graphql import auth_schema
 load_dotenv()
 import os
 from typing import Optional
@@ -14,6 +16,7 @@ from backend.routers import gcp_upload_router
 from strawberry.fastapi import GraphQLRouter
 from backend.graphql.schema import schema
 import uvicorn
+
 
 import logging
 
@@ -42,11 +45,6 @@ def load_origins():
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    logging.info(f"TYPE: {os.getenv('TYPE')}")
-    logging.info(f"PROJECT_ID: {os.getenv('PROJECT_ID')}")
-    logging.info(f"CLIENT_EMAIL: {os.getenv('CLIENT_EMAIL')}")
-    logging.info(f"WEB_URL: {os.getenv('WEB_URL')}")
-    logging.info(f"WEB_URL: {os.getenv('PRIVATE_KEY')}")
     fetch_image = FetchImageQuery()
     fetch_image.all_images()
     yield
@@ -58,6 +56,9 @@ app.title = "memory-lane"
 
 graphql_app = GraphQLRouter(schema= schema)
 app.include_router(graphql_app, prefix="/graphql")
+
+auth_graphql_app = GraphQLRouter(schema=auth_schema)
+app.include_router(auth_graphql_app, prefix="/auth")
 
 origins = load_origins()
 logging.info(f"origins2: {origins}")

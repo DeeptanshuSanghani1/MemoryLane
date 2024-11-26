@@ -1,39 +1,26 @@
 import json
 import os
 import logging
-from dotenv import load_dotenv
+from google.cloud import secretmanager
 
 class Settings:
     def __init__(self):
-        # Load environment variables from .env file (for local development)
-        load_dotenv()
+        self.secret_manager_client = secretmanager.SecretManagerServiceClient()
+        self.service_account_credentials = self.get_secret("service-account")
+        self.db_credentials = self.get_secret("db-credentials")
+        self.service_account_credentials_json = json.dumps(self.service_account_credentials)
+        self.db_credentials_json = json.dumps(self.db_credentials)
 
-        # Check if running in Docker (if service-account.json file exists)
-        service_account_file = '/app/service-account.json'
-        if os.path.exists(service_account_file):
-            # Running inside Docker, load credentials from service-account.json
-            logging.info("Using service account file for credentials.")
-            with open(service_account_file, 'r') as f:
-                self.google_cloud_credentials = json.load(f)
-        else:
-            # Running locally, load credentials from environment variables
-            logging.info("Using environment variables for credentials.")
-            self.google_cloud_credentials = {
-                "type": os.getenv("type"),
-                "project_id": os.getenv("project_id"),
-                "private_key_id": os.getenv("private_key_id"),
-                "private_key": os.getenv("private_key"),
-                "client_email": os.getenv("client_email"),
-                "client_id": os.getenv("client_id"),
-                "auth_uri": os.getenv("auth_uri"),
-                "token_uri": os.getenv("token_uri"),
-                "auth_provider_x509_cert_url": os.getenv("auth_provider_x509_cert_url"),
-                "client_x509_cert_url": os.getenv("client_x509_cert_url"),
-                "universe_domain": os.getenv("universe_domain")
-            }
+    def get_secret(self, secret_name):
+        """Fetch the latest version of a secret from Secret Manager."""
+        try:
+            project_id = os.getenv("GCP_PROJECT_ID", "your-project-id")  # Replace with your project ID or load from env
+            secret_path = f"projects/{project_id}/secrets/{secret_name}/versions/latest"
+            response = self.secret_manager_client.access_secret_version(name=secret_path)
+            secret_payload = response.payload.data.decode("UTF-8")
+            return json.loads(secret_payload)
+        except Exception as e:
+            logging.error(f"Failed to fetch secret {secret_name}: {str(e)}")
+            raise RuntimeError(f"Unable to fetch secret {secret_name}")
         
-        # Convert credentials to JSON string (used for Google authentication)
-        self.google_cloud_credentials_json = json.dumps(self.google_cloud_credentials)
-
-# Instantiate the settings object
 settings = Settings()

@@ -1,35 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import MemoryLane from './components/memoryLane';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
+import "./index.css";
+import App from "./App";
 
-
+// Apollo Client Setup
 const client = new ApolloClient({
   link: createUploadLink({
-    uri : process.env.REACT_APP_GRAPHQL_ENDPOINT
+    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT, // Ensure this environment variable is set in .env
   }),
-  cache: new InMemoryCache()
-})
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
-root.render(
+  cache: new InMemoryCache(),
+});
+
+ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <ApolloProvider client={client}>
-    <Router>
-      <Routes>
-        <Route path="/" element={<App />} />
-        <Route path="/memoryLane" element={<MemoryLane/>} />
-      </Routes>
-    </Router>
+      <App />
     </ApolloProvider>
   </React.StrictMode>
 );
-
-
-
