@@ -15,7 +15,8 @@ def initial_fetch_image(refresh_cache = True):
     logging.info(f"WEB_URL: {os.getenv('PRIVATE_KEY')}")
     credentials = service_account.Credentials.from_service_account_info(settings.google_cloud_credentials)
     client = storage.Client(credentials=credentials)
-    bucket = client.get_bucket("images-bucket-memory-lane")
+    bucket_name = os.getenv("BUCKET_NAME")
+    bucket = client.get_bucket(bucket_name)
     blobs = bucket.list_blobs()
     fresh_image_urls = [
         f"https://storage.googleapis.com/{bucket.name}/{blob.name}" for blob in blobs

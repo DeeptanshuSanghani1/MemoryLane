@@ -4,6 +4,7 @@ from google.oauth2 import service_account
 from backend.constants import settings
 from backend.providers.gcp_image_fetch import image_urls
 from backend.global_constants import set_image_urls,image_urls,get_image_url
+import os
 
 
 
@@ -11,7 +12,8 @@ async def upload_to_gcp(file: UploadFile):
     image_urls
     credentials = service_account.Credentials.from_service_account_info(settings.google_cloud_credentials)
     client = storage.Client(credentials=credentials)
-    bucket = client.get_bucket("images-bucket-memory-lane")
+    bucket_name = os.getenv("BUCKET_NAME")
+    bucket = client.get_bucket(bucket_name)
     blob = bucket.blob(file.filename)
     try:
         blob.upload_from_file(file.file, content_type=file.content_type)

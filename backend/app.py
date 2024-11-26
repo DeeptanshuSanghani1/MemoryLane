@@ -21,24 +21,14 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 def load_origins():
-    origins_file = '/app/origins-url.json'
-    static_origin = "http://localhost:5173"
-    origins = [static_origin]
+    origins = []
     
-    try:
-        with open(origins_file, 'r') as f:
-            origins_data = json.load(f)
-            web_url = origins_data.get('web_url')
-            if web_url:
-                origins.append(web_url)
-            logging.info(f"origins: {origins}")
-            return origins
-    except FileNotFoundError:
-        logging.error(f"{origins_file} not found.")
-        return origins
-    except json.JSONDecodeError:
-        logging.error(f"Error decoding JSON from {origins_file}.")
-        return origins
+    env_origins = os.getenv("ORIGINS", "")
+    if env_origins:
+        origins.extend(env_origins.split(","))
+        logging.info(f"Loaded origins from environment variables: {origins}")
+    
+    return origins
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -75,10 +65,11 @@ logging.info(f"origins2: {origins}")
 
 
 logging.info(f"origins3: {origins}")
+print("origins4: ", origins)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://memory-lane-frontend.vercel.app"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -87,6 +78,10 @@ app.add_middleware(
 @app.get("/healthcheck")
 async def healthcheck():
     return {"status": "Backend is running"}
+
+# @app.options("/graphql")  # Explicitly handle OPTIONS requests for /graphql
+# async def handle_options():
+#     return {"message": "Preflight handled"}
 
 
 if __name__ == "__main__":
