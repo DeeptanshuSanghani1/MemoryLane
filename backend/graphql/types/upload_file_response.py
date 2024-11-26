@@ -23,3 +23,8 @@ class AuthUser:
     username: str
     password: str
 
+@strawberry.type
+class SignUpResponse:
+    success : bool
+    message : str
+

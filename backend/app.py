@@ -17,31 +17,30 @@ from strawberry.fastapi import GraphQLRouter
 from backend.graphql.schema import schema
 import uvicorn
 
-
 import logging
 
 
 logging.basicConfig(level=logging.INFO)
 
-def load_origins():
-    origins_file = '/app/origins-url.json'
-    static_origin = "http://localhost:5173"
-    origins = [static_origin]
+# def load_origins():
+#     origins_file = '/app/origins-url.json'
+#     static_origin = "http://localhost:5173"
+#     origins = [static_origin]
     
-    try:
-        with open(origins_file, 'r') as f:
-            origins_data = json.load(f)
-            web_url = origins_data.get('web_url')
-            if web_url:
-                origins.append(web_url)
-            logging.info(f"origins: {origins}")
-            return origins
-    except FileNotFoundError:
-        logging.error(f"{origins_file} not found.")
-        return origins
-    except json.JSONDecodeError:
-        logging.error(f"Error decoding JSON from {origins_file}.")
-        return origins
+#     try:
+#         with open(origins_file, 'r') as f:
+#             origins_data = json.load(f)
+#             web_url = origins_data.get('web_url')
+#             if web_url:
+#                 origins.append(web_url)
+#             logging.info(f"origins: {origins}")
+#             return origins
+#     except FileNotFoundError:
+#         logging.error(f"{origins_file} not found.")
+#         return origins
+#     except json.JSONDecodeError:
+#         logging.error(f"Error decoding JSON from {origins_file}.")
+#         return origins
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -57,11 +56,11 @@ app.title = "memory-lane"
 graphql_app = GraphQLRouter(schema= schema)
 app.include_router(graphql_app, prefix="/graphql")
 
-auth_graphql_app = GraphQLRouter(schema=auth_schema)
-app.include_router(auth_graphql_app, prefix="/auth")
+#auth_graphql_app = GraphQLRouter(schema=auth_schema)
+#app.include_router(auth_graphql_app, prefix="/auth")
 
-origins = load_origins()
-logging.info(f"origins2: {origins}")
+#origins = load_origins()
+#logging.info(f"origins2: {origins}")
 
 # api = FastAPI(root_path="/api")
 # api.title = "memory-lane api"
@@ -75,7 +74,7 @@ logging.info(f"origins2: {origins}")
 # ])
 
 
-logging.info(f"origins3: {origins}")
+#logging.info(f"origins3: {origins}")
 
 app.add_middleware(
     CORSMiddleware,
@@ -91,8 +90,7 @@ async def healthcheck():
 
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT", 8000))
+    port = int(os.getenv("PORT", 8080))
     uvicorn.run(app, host="0.0.0.0", port=port)
-
 
 

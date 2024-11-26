@@ -4,6 +4,7 @@ from passlib.context import CryptContext
 from datetime import datetime, timedelta
 from jwt import encode, decode, PyJWTError
 
+from backend.graphql.types.upload_file_response import SignUpResponse, User
 from constants import settings
 from google.cloud import firestore
 
@@ -44,7 +45,14 @@ def authenticate_user(username: str, password: str):
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Invalid username or password",
             )
-        return user
+        token = create_access_token(
+            user, timedelta(hours=24))
+        user_response = User(username=user)
+        return{
+            "user" : {"username" : user.get("username")},
+            "access_token ": token,
+            "token_type" : "bearer",
+        }
     except Exception as e:
         print(f"Error querying Firestore: {e}")
         raise HTTPException(
@@ -52,7 +60,7 @@ def authenticate_user(username: str, password: str):
             detail="Internal server error",
         )
     
-def signup_user(username: str, password: str):
+def signup_user(username: str, password: str) -> SignUpResponse:
     try:
         existing_user = users_collection.where("username", "==", username).get()
         if existing_user:
@@ -67,7 +75,7 @@ def signup_user(username: str, password: str):
             "password": hashed_password,
         })
 
-        return {"message": "User successfully registered"}
+        return SignUpResponse(success=True, message="User created Successfully.")
     except Exception as e:
         print(f"Error during signup: {e}")
         raise HTTPException(

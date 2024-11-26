@@ -174,7 +174,7 @@ cython_debug/
 .idea/
 
 *.db
-.dockerfile
-origins-url.json
-service-account.json
-cors.json
+#.dockerfile
+#origins-url.json
+#service-account.json
+#cors.json
