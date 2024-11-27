@@ -28,8 +28,9 @@ export const useAuth = () => {
   useEffect(() => {
     setLoading(true);
     const localToken = localStorage.getItem("user");
-    setUser(localToken ? (JSON.parse(localToken).user as User) : null);
+    setUser(localToken ? JSON.parse(localToken) : null);
     setLoading(false);
+    console.log("Local Token: ",user)
   }, []);
 
   const login = (userInfo: UserLoginInfo) => {
@@ -37,23 +38,29 @@ export const useAuth = () => {
       setLoading(true);
       loginMutation({
         variables: {
-          username: userInfo.username,
-          password: userInfo.password,
+          input:{
+            username: userInfo.username,
+            password: userInfo.password,
+          }
         },
       })
         .then((response) => {
           const data = response.data?.login;
-          if (data?.success) {
+          if (data) {
             // Save the user and token to localStorage
             const userData = {
               username: userInfo.username,
-              access_token: data.accessToken,
+              accessToken: data.accessToken,
+              tokenType : data.tokenType
             };
             localStorage.setItem("user", JSON.stringify(userData));
-            setUser(userData);
+            setUser({
+              username: userInfo.username,
+              access_token: data.accessToken,
+            });
             resolve(userData);
           } else {
-            reject(data?.message || "Login failed");
+            reject(data || "Login failed");
           }
         })
         .catch((error) => {
@@ -71,8 +78,10 @@ export const useAuth = () => {
       setLoading(true);
       signupMutation({
         variables: {
-          username: userInfo.username,
-          password: userInfo.password,
+          input: {
+            username: userInfo.username,
+            password: userInfo.password,
+          },
         },
       })
         .then((response) => {

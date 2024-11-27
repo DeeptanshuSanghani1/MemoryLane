@@ -1,9 +1,6 @@
 from contextlib import asynccontextmanager
 import json
-from backend.constants import settings
 from dotenv import load_dotenv
-
-from backend.graphql import auth_schema
 load_dotenv()
 import os
 from typing import Optional
@@ -29,16 +26,15 @@ def load_origins():
     if env_origins:
         origins.extend(env_origins.split(","))
         logging.info(f"Loaded origins from environment variables: {origins}")
-    
     return origins
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    fetch_image = FetchImageQuery()
-    fetch_image.all_images()
-    yield
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     fetch_image = FetchImageQucery()
+#     fetch_image.all_images()
+#     yield
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 
 app.title = "memory-lane"
@@ -66,7 +62,7 @@ print("origins4: ", origins)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://memory-lane-frontend.vercel.app"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

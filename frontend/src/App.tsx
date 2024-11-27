@@ -1,6 +1,6 @@
 import { Settings } from "page-flip";
 import "./index.css";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import AuthLayout from "./layout/AuthLayout";
 import RootLayout from "./layout/RootLayout";
 import MemoryLane from "./components/memoryLane";
@@ -11,6 +11,7 @@ import HomePage from "./Pages/HomePage";
 
 function App() {
   return (
+    <BrowserRouter>
     <Routes>
       <Route path="/" element={<Navigate to={"/login"} />} />
       <Route element={<RootLayout />}>
@@ -26,6 +27,7 @@ function App() {
 
       </Route>
     </Routes>
+    </BrowserRouter>
   );
 }
 export default App;

@@ -28,6 +28,7 @@ const LoginComponent = () => {
 
   const onSubmit: SubmitHandler<LoginSchemaType> = (data: LoginSchemaType) => {
     setLoading(true);
+    console.log("Data: ", data)
     login(data)
       .then((response) => {
         setLoading(false);
@@ -36,12 +37,13 @@ const LoginComponent = () => {
       })
       .catch((err) => {
         setLoading(false);
-        setError("password", { message: "Incorrect email or password" });
+        setError("password", { message: "Incorrect email or " });
         if (err.status === 401) {
+          console.log("Error?????")
           console.log("Invalid username or password");
-        } else {
-          console.log("An error occurred. Please try again later");
-        }
+        } //else {
+          //console.log("An error occurred. Please try again later", err.status);
+        //}
       });
   };
 

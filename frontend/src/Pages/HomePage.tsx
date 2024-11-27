@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../src/App.css'
 import Background from '../components/background';
-import Banner from './Components/Banner';
+import Banner from '../Pages/Components/Banner';
 
 
 function HomePage() {
