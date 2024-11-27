@@ -178,4 +178,4 @@ cython_debug/
 origins-url.json
 service-account.json
 cors.json
-deployment.yaml
+*.yaml
