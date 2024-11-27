@@ -1,0 +1,23 @@
+resources:
+- name: my-storage-bucket
+  type: storage.v1.bucket
+  properties:
+    name: memory-lane-v2
+    location: US
+    storageClass: STANDARD
+
+- name: my-cloud-run-service
+  type: gcp-types/cloudrun-v1:projects.locations.services
+  properties:
+    serviceId: my-cloud-run-service
+    location: us-central1
+    template:
+      spec:
+        containers:
+        - image: gcr.io/keystart-project/memorylane-backend@sha256:a03ae5380302aa45e46375d3c21a79cd3abb22bdee89df2583fafba1ac19f26e
+          env:
+          - name: BUCKET_NAME
+            value: memory-lane-v2
+    traffic:
+    - percent: 100
+      latestRevision: true

@@ -1,19 +1,14 @@
 from contextlib import asynccontextmanager
-import json
-from backend.constants import settings
 from dotenv import load_dotenv
 load_dotenv()
 import os
-from typing import Optional
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import strawberry
 from backend.graphql.queries.fetch_image_query import FetchImageQuery
-from backend.providers import gcp_upload
-from backend.routers import gcp_upload_router
 from strawberry.fastapi import GraphQLRouter
 from backend.graphql.schema import schema
 import uvicorn
+
 
 import logging
 
@@ -30,18 +25,18 @@ def load_origins():
     
     return origins
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    logging.info(f"TYPE: {os.getenv('TYPE')}")
-    logging.info(f"PROJECT_ID: {os.getenv('PROJECT_ID')}")
-    logging.info(f"CLIENT_EMAIL: {os.getenv('CLIENT_EMAIL')}")
-    logging.info(f"WEB_URL: {os.getenv('WEB_URL')}")
-    logging.info(f"WEB_URL: {os.getenv('PRIVATE_KEY')}")
-    fetch_image = FetchImageQuery()
-    fetch_image.all_images()
-    yield
+# @asynccontextmanager
+# async def lifespan(app: FastAPI):
+#     logging.info(f"TYPE: {os.getenv('TYPE')}")
+#     logging.info(f"PROJECT_ID: {os.getenv('PROJECT_ID')}")
+#     logging.info(f"CLIENT_EMAIL: {os.getenv('CLIENT_EMAIL')}")
+#     logging.info(f"WEB_URL: {os.getenv('WEB_URL')}")
+#     logging.info(f"WEB_URL: {os.getenv('PRIVATE_KEY')}")
+#     fetch_image = FetchImageQuery()
+#     fetch_image.all_images()
+#     yield
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI()
 
 
 app.title = "memory-lane"
@@ -79,14 +74,8 @@ app.add_middleware(
 async def healthcheck():
     return {"status": "Backend is running"}
 
-# @app.options("/graphql")  # Explicitly handle OPTIONS requests for /graphql
-# async def handle_options():
-#     return {"message": "Preflight handled"}
-
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)
-
-
-
+	
