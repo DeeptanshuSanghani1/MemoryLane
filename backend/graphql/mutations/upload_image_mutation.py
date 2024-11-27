@@ -1,28 +1,27 @@
 from fastapi import HTTPException, UploadFile
 import strawberry
 
-from backend.graphql.types.upload_file_response import SignUpResponse, UploadFileResponse
+from backend.graphql.types.upload_file_response import UploadFileResponse
 from backend.providers.gcp_upload import upload_to_gcp
-from backend.providers.image_delete import delete_image
 from backend.graphql.types.upload_file_response import AuthUser, LoginResponse, User
 from backend.providers.auth_provider import signup_user, authenticate_user, verify_token
-
-
+from backend.providers.image_delete import delete_image
 
 
 @strawberry.type
 class Mutation:
     @strawberry.mutation
-    async def read_file(self, file: UploadFile) -> UploadFileResponse:
+    async def read_file(self, file: UploadFile, username:str) -> UploadFileResponse:
         if(file.content_type not in ['image/jpeg', 'image/jpg', 'image/png']):
             raise HTTPException(status_code=400, detail="Invalid file type")
-        access_url = await upload_to_gcp(file)
+        access_url = await upload_to_gcp(file, username)
         return UploadFileResponse(success= True, message="File Uploaded Successfully", url=access_url)
+    
 
     @strawberry.mutation
-    async def delete_photo(self, file_key: str) -> UploadFileResponse:
+    async def delete_photo(self, file_key: str, username:str) -> UploadFileResponse:
         try:
-            delete_success = await delete_image(file_key)
+            delete_success = await delete_image(file_key, username)
 
             if delete_success:
                 return UploadFileResponse(
@@ -35,23 +34,23 @@ class Mutation:
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to delete file: {str(e)}")
-        
 
+
+
+@strawberry.type
+class Mutation:
     @strawberry.mutation
-    def signup(self, input: AuthUser) -> SignUpResponse:
+    def signup(self, input: AuthUser) -> dict:
         return signup_user(input.username, input.password)
 
     @strawberry.mutation
     def login(self, input: AuthUser) -> LoginResponse:
         login_result = authenticate_user(input.username, input.password)
-        return LoginResponse(
-        user=User(username=login_result["user"]["username"]),
-        access_token=login_result["access_token"],
-        token_type=login_result["token_type"],
-    )
+        return LoginResponse(**login_result)
 
     @strawberry.mutation
     def verify(self, access_token: str) -> User:
         user_info = verify_token(access_token)
         return User(username=user_info["username"])
     
+auth_schema = strawberry.Schema(mutation=Mutation)

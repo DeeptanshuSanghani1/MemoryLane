@@ -13,10 +13,11 @@
 #     @strawberry.mutation
 #     def login(self, input: AuthUser) -> LoginResponse:
 #         login_result = authenticate_user(input.username, input.password)
-#         return LoginResponse(login_result)
+#         return LoginResponse(**login_result)
 
 #     @strawberry.mutation
 #     def verify(self, access_token: str) -> User:
 #         user_info = verify_token(access_token)
 #         return User(username=user_info["username"])
     
+# auth_schema = strawberry.Schema(mutation=Mutation)

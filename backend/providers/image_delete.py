@@ -1,9 +1,10 @@
 from fastapi import HTTPException
 from google.cloud import storage
 from urllib.parse import unquote, urlparse
+import os
 
-async def delete_image(file_key):
-    bucket_name = "images-bucket-memory-lane"
+async def delete_image(file_key: str, username : str):
+    bucket_name = os.getenv("BUCKET_NAME")
     print("Attempting to delete file with key: ", file_key)
     file_key = unquote(file_key)
 
@@ -15,7 +16,7 @@ async def delete_image(file_key):
             parsed_url = urlparse(file_key)
             file_key = parsed_url.path.lstrip("/")
 
-        blob = bucket.blob(file_key)
+        blob = bucket.blob(f"{username}/{file_key}")
 
         if not blob.exists():
             print(f"File with key '{file_key}' not found in bucket.")
