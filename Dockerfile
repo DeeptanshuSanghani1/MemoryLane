@@ -7,8 +7,6 @@ RUN poetry config virtualenvs.create false
 COPY pyproject.toml /app/
 RUN poetry install --no-dev --no-interaction --no-ansi
 RUN pip list
-COPY service-account.json /app/service-account.json
-COPY origins-url.json /app./origins-url.json
 COPY backend /app/backend
 WORKDIR /app/backend
 ENV PYTHONPATH=/app

@@ -1,0 +1,8 @@
+[
+    {
+      "origin": ["https://memory-lane-frontend.vercel.app"],
+      "responseHeader": ["Content-Type", "Authorization"],
+      "method": ["GET", "HEAD", "PUT", "POST", "DELETE"],
+      "maxAgeSeconds": 3600
+    }
+]
