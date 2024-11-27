@@ -179,3 +179,9 @@ origins-url.json
 service-account.json
 cors.json
 *.yaml
+
+terraform-key.json
+terraform.tfstate
+terraform.tfstate.backup
+.terraform/
+.terraform.lock.hcl
