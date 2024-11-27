@@ -8,7 +8,7 @@ import App from "./App";
 // Apollo Client Setup
 const client = new ApolloClient({
   link: createUploadLink({
-    uri: "https://memorylane-service-ke4ahcvf3a-ue.a.run.app/graphql" //process.env.REACT_APP_GRAPHQL_ENDPOINT, // Ensure this environment variable is set in .env
+    uri: process.env.REACT_APP_GRAPHQL_ENDPOINT, // Ensure this environment variable is set in .env
   }),
   cache: new InMemoryCache(),
 });

@@ -1,3 +1,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#topo {
+    background-image: url("./assets/topo-pattern.png");
+    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
