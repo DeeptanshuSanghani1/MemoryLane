@@ -48,4 +48,3 @@ class Mutation:
         access_token=login_result["access_token"],
         token_type=login_result["token_type"],
     )
-    

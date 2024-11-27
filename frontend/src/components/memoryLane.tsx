@@ -26,16 +26,16 @@ const MemoryLane = () => {
   let username = "";
   if (localToken) {
     const parsedToken = JSON.parse(localToken);
-    console.log("Parsed: ", parsedToken)
     username = parsedToken.username;
-    console.log(username)
   }
 
   // GraphQL Query for fetching image URLs
   const { loading, error, data, refetch } = useQuery(FETCH_IMAGE_URLS, {
     variables: { username: username },
     onCompleted(data) {
-      setUrls(data?.getPhotos?.urls || []);
+      if(data.allImages){
+        setUrls(data.allImages)
+      }
     },
     onError(err) {
       console.error("Error fetching images:", err);
@@ -45,15 +45,14 @@ const MemoryLane = () => {
   useEffect(() => {
     if (data && data.allImages) {
       setUrls(data.allImages);
-      console.log("URLs updated via useEffect:", data.allImages);
     }
   }, [data]);
+
 
   // GraphQL Mutation for uploading a file
   const [uploadPhoto] = useMutation(UPLOAD_FILE_MUTATION, {
     refetchQueries: [{query : FETCH_IMAGE_URLS}],
     onCompleted(data) {
-      console.log("Upload Success:", data);
       setUploadSuccessMessage(true);
       setTimeout(() => setUploadSuccessMessage(false), 5000);
       refetch();
@@ -67,7 +66,6 @@ const MemoryLane = () => {
   const [deletePhoto] = useMutation(DELETE_FILE_MUTATION, {
     refetchQueries: [{query : FETCH_IMAGE_URLS}],
     onCompleted(data) {
-      console.log("Delete Success:", data);
       refetch();
     },
     onError(err) {
@@ -96,12 +94,16 @@ const MemoryLane = () => {
   const handleDelete = () => {
     if (selectedPage !== null && urls[selectedPage]) {
       const fileUrl = urls[selectedPage];
+      const fileKey = fileUrl.replace(
+        `https://storage.googleapis.com/picturebook-images/${username}/`,
+        ""
+      );
       // const fileKey = fileUrl.split(
       //   "https://images-bucket-memory-lane.s3.amazonaws.com/"
       // )[1];
       deletePhoto({
         variables: {
-          fileKey : fileUrl,
+          fileKey : fileKey,
           username: username,
         },
       });
@@ -119,7 +121,7 @@ const MemoryLane = () => {
 
       <div className="relative z-0 flex flex-col items-center justify-center h-full w-full">
         <div className="w-full max-w-3xl mx-auto p-6 bg-transparent">
-          <PictureBook urls={urls} />
+          <PictureBook key={urls.length} urls={urls} />
 
           <div className="mt-4 flex flex-col items-center">
             <FileUploader files={files} onUploadFile={uploadFile} />
