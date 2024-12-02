@@ -2,13 +2,13 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = ">= 4.0.0" # Ensure latest Google provider version
+      version = ">= 4.0.0"
     }
   }
 }
 
 provider "google" {
-  credentials = file("terraform-key.json")  # Path to your service account key
+  credentials = file("terraform-key.json")
   project     = "<YOUR_PROJECT_NAME>"
   region      = "us-east1"
 }
@@ -30,9 +30,9 @@ resource "google_project_service" "enable_firestore" {
 }
 
 resource "google_firestore_database" "firestore" {
-  name     = "(default)"  # Use '(default)' for the primary database
-  location_id = "us-east1" # Replace with your desired Firestore region
-  type     = "FIRESTORE_NATIVE"     # Firestore Native mode
+  name     = "(default)" 
+  location_id = "us-east1"
+  type     = "FIRESTORE_NATIVE"
 }
 
 resource "google_project_service" "enable_storage" {
@@ -41,16 +41,16 @@ resource "google_project_service" "enable_storage" {
 }
 
 resource "google_firestore_index" "users_index" {
-  collection = "users" # Firestore collection name
+  collection = "users"
 
   fields {
     field_path = "username"
-    order      = "ASCENDING" # Index on 'username' in ascending order
+    order      = "ASCENDING"
   }
 
   fields {
     field_path = "password"
-    order      = "ASCENDING" # Index on 'password' in ascending order
+    order      = "ASCENDING"
   }
 }
 
@@ -81,7 +81,7 @@ resource "google_cloudfunctions_function" "firestore_trigger_function" {
   name        = "firestore-user-trigger"
   description = "Creates a folder in the Cloud Storage bucket when a user is added to Firestore"
   runtime     = "python310"
-  entry_point = "entry_point_function" # Replace with your actual entry point function name
+  entry_point = "entry_point_function"
   available_memory_mb = 128
   source_archive_bucket = google_storage_bucket.function_code_bucket.name
   source_archive_object = google_storage_bucket_object.function_code.name
@@ -95,7 +95,7 @@ resource "google_cloudfunctions_function" "firestore_trigger_function" {
   }
 }
 
-# Storage bucket for Cloud Function source code
+# Storage for cloud function code
 resource "google_storage_bucket" "function_code_bucket" {
   name          = "deeptanshu-trigger-code"
   location      = "US"
